@@ -38,24 +38,27 @@ with open('source_data.json') as json_file:
 names_match=[]
 npis_match=[]
 addresses_match=[]
+total=set()
    
 #for each record in match_file, see if the name, npi, and address already 
 #exist in the source data 
 for row in range(len(df.first_name)):
     if (" ".join([df.first_name[row],df.last_name[row]]).lower()) in l_name:
         names_match.append(row)
+        total.add(row)
     if (df.npi[row]) in l_npi:
         npis_match.append(row)
+        total.add(row)
     if (" ".join([str(df.street[row]).lower(), 
                   str(df.street_2[row]).lower(), 
                   str(df.city[row]).lower(), 
                   str(df.state[row]).lower(), 
                   str(df.zip[row])[:5]])) in l_address:   
         addresses_match.append(row)
+        total.add(row)
 
-#report results (length of each match list (for the total: lengh of union of match sets))
-print("Total Matched Documents: {}".format(len(set(names_match) | 
-        set(npis_match) | set(addresses_match))))        
+#report results (length of each match list, length of total set)
+print("Total Matched Documents: {}".format(len(total)))       
 print("Matched Documents Using First and Last Name: {}".format(len(names_match)))
 print("Matched Documents by NPI: {}".format(len(npis_match)))
 print("Matched Documents Using Address: {}".format(len(addresses_match)))   
